@@ -3,6 +3,7 @@ use std::fs;
 
 pub mod day1;
 pub mod day2;
+pub mod day3;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -27,6 +28,7 @@ fn run_solution(day: &str, input: Vec<String>) {
     match day {
         "1" => day1::calculate(input).unwrap(),
         "2" => day2::main(input).unwrap(),
+        "3" => day3::main(input).unwrap(),
         _ => println!("Day {} not implemented yet", day),
     }
 }
