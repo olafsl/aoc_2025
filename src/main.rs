@@ -5,6 +5,8 @@ pub mod day1;
 pub mod day2;
 pub mod day3;
 pub mod day4;
+pub mod day5;
+pub mod day6;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -31,6 +33,8 @@ fn run_solution(day: &str, input: Vec<String>) {
         "2" => day2::main(input).unwrap(),
         "3" => day3::main(input).unwrap(),
         "4" => day4::main(input).unwrap(),
+        "5" => day5::main(input).unwrap(),
+        "6" => day6::main(input).unwrap(),
         _ => println!("Day {} not implemented yet", day),
     }
 }
