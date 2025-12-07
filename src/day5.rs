@@ -1,51 +1,76 @@
-use std::{ops::RangeInclusive, u128};
+use std::cmp::Ordering;
 
-pub fn compare_ranges(a: RangeInclusive<u128>, b: RangeInclusive<u128>) {
-    match (a.start(), a.end()) {
-        (start, end) if end < b.start() || start > b.end() => (a, b),
-        (start, end) if end 
+#[derive(PartialOrd, PartialEq, Eq, Clone, Copy, Debug)]
+struct Range {
+    start: u128,
+    end: u128,
+}
 
+impl Range {
+    fn new(start: &str, end: &str) -> Range {
+        Range {
+            start: start.parse::<u128>().unwrap(),
+            end: end.parse::<u128>().unwrap(),
+        }
+    }
 
+    fn remove_existing(&mut self, other: Self) -> Result<(), Box<dyn std::error::Error>> {
+        if (self.start >= other.start && self.end <= other.end)
+            || (self.start < other.end && self.start == self.end)
+        {
+            return Err("Nothing left".into());
+        }
+
+        if self.start <= other.end && self.end > other.end {
+            self.start = other.end + 1
+        }
+
+        Ok(())
+    }
+
+    fn length(self) -> u128 {
+        self.end - self.start + 1
     }
 }
 
-
+impl Ord for Range {
+    fn cmp(&self, other: &Self) -> Ordering {
+        match self.start.cmp(&other.start) {
+            Ordering::Equal => self.end.cmp(&other.end).reverse(),
+            x => x,
+        }
+    }
+}
 
 pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     let mut input = input.clone();
     let empty_line = input.iter().position(|x| x.len() == 0).unwrap();
-    let available_ingredients = input.split_off(empty_line);
+    input.truncate(empty_line);
 
-    let mut fresh_ingredient_ranges: Vec<RangeInclusive<u128>> = input
+    let mut fresh_ingredient_ranges: Vec<Range> = input
         .iter()
         .map(|x: &String| x.split_once("-").unwrap())
-        .map(|(a, z)| (a.parse::<u128>().unwrap(), z.parse::<u128>().unwrap()))
-        .map(|(a, z)| a..=z)
+        .map(|(a, z)| Range::new(a, z))
         .collect();
-    let available_ingredients = available_ingredients
-        .iter()
-        .skip(1)
-        .map(|x| x.parse::<u128>().unwrap());
 
-    let result_a = available_ingredients
-        .filter(|ingredient_id| {
-            fresh_ingredient_ranges
-                .iter()
-                .any(|range: &RangeInclusive<_>| range.contains(ingredient_id))
-        })
-        .count();
+    fresh_ingredient_ranges.sort_by(|a, b| a.cmp(b));
 
-    let mut completed_ranges: Vec<RangeInclusive<u128>> = Vec::new();
+    let mut completed_ranges: Vec<Range> = Vec::new();
     let mut sum = 0;
-    for range in fresh_ingredient_ranges {
-        println!("Range: {:?}", range);
-        let vals = range.clone().filter(|val| !completed_ranges.iter().any(|completed: &RangeInclusive<u128>| completed.contains(val)));
-        sum += vals.count();
-        completed_ranges.push(range);
+    'outer: for range in fresh_ingredient_ranges.iter_mut() {
+        for completed in completed_ranges.iter() {
+            match range.remove_existing(*completed) {
+                Err(_) => {
+                    continue 'outer;
+                }
+                Ok(()) => (),
+            }
+        }
+
+        sum += range.length().clone();
+        completed_ranges.push(range.clone());
     }
 
-
-    println!("Result A: {:?}", result_a);
     println!("Result B: {:?}", sum);
 
     Ok(())
