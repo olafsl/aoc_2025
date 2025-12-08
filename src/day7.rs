@@ -24,8 +24,14 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
                 Some(x) => x,
             };
 
-            tachyons.entry(splitter - 1).and_modify(|x| *x += nr_of_timelines).or_insert(nr_of_timelines);
-            tachyons.entry(splitter + 1).and_modify(|x| *x += nr_of_timelines).or_insert(nr_of_timelines);
+            tachyons
+                .entry(splitter - 1)
+                .and_modify(|x| *x += nr_of_timelines)
+                .or_insert(nr_of_timelines);
+            tachyons
+                .entry(splitter + 1)
+                .and_modify(|x| *x += nr_of_timelines)
+                .or_insert(nr_of_timelines);
         }
     }
 
