@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::{collections::HashMap};
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct ElectricalBox(isize, isize, isize);
 
 impl ElectricalBox {
@@ -24,22 +24,12 @@ impl ElectricalBox {
     }
 }
 
-pub fn calculate_distances(boxes: Vec<ElectricalBox>) -> HashMap<(usize, usize), isize> {
+pub fn calculate_distances(boxes: &Vec<ElectricalBox>) -> HashMap<(usize, usize), isize> {
     let mut distances_memoization: HashMap<(usize, usize), isize> = HashMap::new();
     for ((i, box_i), (j, box_j)) in boxes.iter().enumerate().tuple_combinations() {
         distances_memoization.insert((i, j), box_i.distance(box_j));
     }
     distances_memoization
-}
-
-pub fn is_valid_circuit_combinations(
-    (circuit_a, circuit_b): &(&Vec<usize>, &Vec<usize>),
-    valid_id_pairs: &Vec<&(usize, usize)>,
-) -> bool {
-    circuit_a
-        .iter()
-        .cartesian_product(circuit_b.iter())
-        .any(|(x, y)| valid_id_pairs.contains(&&(*x, *y)))
 }
 
 pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
@@ -48,26 +38,11 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
         .map(ElectricalBox::new)
         .collect::<Vec<ElectricalBox>>();
     let mut circuits: Vec<Vec<usize>> = Vec::new();
-    let iterations = match boxes.len() {
-        20 => 10,
-        1000 => 1000,
-        _ => panic!("No nr of iterations found"),
-    };
 
-    let mut distances_memoization = calculate_distances(boxes);
-    let last_distance = distances_memoization
-        .values()
-        .sorted()
-        .take(iterations)
-        .last()
-        .unwrap()
-        .clone();
-    distances_memoization.retain(|_key, value| *value <= last_distance);
-    let valid_pairs = distances_memoization.keys().collect_vec();
+    let distances_memoization = calculate_distances(&boxes);
+    let valid_pairs = distances_memoization.iter().sorted_by(|(_, val_a), (_, val_b)| val_a.cmp(val_b)).map(|(idx, _)| idx).collect_vec();
 
     for (i, j) in valid_pairs {
-        println!("{:?}", circuits);
-        println!("{:?}, {:?}", i, j);
 
         let mut circuit_a = match circuits.iter().position(|x| x.contains(i)) {
             Some(x) => circuits.remove(x),
@@ -86,20 +61,18 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
         let _ = circuit_a.append(&mut circuit_b);
 
         circuits.push(circuit_a);
+
+        if circuits[0].len() == boxes.len() {
+            println!("{:?}", circuits);
+            println!("{:?}, {:?}", i, j);
+            let box_a = &boxes[*i].clone();
+            let box_b = &boxes[*j].clone();
+
+            println!("{:?}", box_a.0 * box_b.0);
+            break
+
+        }
     }
-
-    println!("{:?}", circuits);
-    let mut lengths = circuits
-        .iter()
-        .map(|x| x.len())
-        .sorted()
-        .rev()
-        .collect::<Vec<usize>>();
-    println!("{:?}", lengths);
-
-    let _ = lengths.split_off(3);
-    let result: usize = lengths.iter().product();
-    println!("{:?}", result);
 
     Ok(())
 }
