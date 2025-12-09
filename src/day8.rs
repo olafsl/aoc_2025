@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy)]
 pub struct ElectricalBox(isize, isize, isize);
@@ -40,10 +40,13 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     let mut circuits: Vec<Vec<usize>> = Vec::new();
 
     let distances_memoization = calculate_distances(&boxes);
-    let valid_pairs = distances_memoization.iter().sorted_by(|(_, val_a), (_, val_b)| val_a.cmp(val_b)).map(|(idx, _)| idx).collect_vec();
+    let valid_pairs = distances_memoization
+        .iter()
+        .sorted_by(|(_, val_a), (_, val_b)| val_a.cmp(val_b))
+        .map(|(idx, _)| idx)
+        .collect_vec();
 
     for (i, j) in valid_pairs {
-
         let mut circuit_a = match circuits.iter().position(|x| x.contains(i)) {
             Some(x) => circuits.remove(x),
             None => vec![i.clone()],
@@ -69,8 +72,7 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
             let box_b = &boxes[*j].clone();
 
             println!("{:?}", box_a.0 * box_b.0);
-            break
-
+            break;
         }
     }
 
