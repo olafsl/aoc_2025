@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use itertools::Itertools;
 
-pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn main(input: Vec<String>) {
     let mut tachyons: HashMap<usize, usize> = HashMap::new();
     let mut input = input.iter();
     let initial_line = input.next().expect("No initial line");
@@ -38,6 +38,4 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     let result: usize = tachyons.values().sum();
 
     println!("Tachyons: {:?}", result);
-
-    Ok(())
 }

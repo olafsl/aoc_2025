@@ -2,6 +2,7 @@ use clap::Parser;
 use std::fs;
 
 pub mod day1;
+pub mod day10;
 pub mod day2;
 pub mod day3;
 pub mod day4;
@@ -32,15 +33,16 @@ fn load_input(day: &str, example: bool) -> Vec<String> {
 
 fn run_solution(day: &str, input: Vec<String>) {
     match day {
-        "1" => day1::calculate(input).unwrap(),
-        "2" => day2::main(input).unwrap(),
-        "3" => day3::main(input).unwrap(),
-        "4" => day4::main(input).unwrap(),
-        "5" => day5::main(input).unwrap(),
-        "6" => day6::main(input).unwrap(),
-        "7" => day7::main(input).unwrap(),
-        "8" => day8::main(input).unwrap(),
-        "9" => day9::main(input).unwrap(),
+        "1" => day1::main(input),
+        "2" => day2::main(input),
+        "3" => day3::main(input),
+        "4" => day4::main(input),
+        "5" => day5::main(input),
+        "6" => day6::main(input),
+        "7" => day7::main(input),
+        "8" => day8::main(input),
+        "9" => day9::main(input),
+        "10" => day10::main(input),
         _ => println!("Day {} not implemented yet", day),
     }
 }

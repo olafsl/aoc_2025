@@ -35,7 +35,7 @@ pub fn process<'a>(center: &'a mut Cell, neighbours: impl Iterator<Item = &'a Ce
     }
 }
 
-pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn main(input: Vec<String>) {
     let input_height = input.len();
     let input_width = input.first().map(|s| s.len()).unwrap_or(0);
 
@@ -84,5 +84,4 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     println!("Result: {:?}, in {:?} cycles", nr_of_emptied, nr_of_cycles);
-    Ok(())
 }

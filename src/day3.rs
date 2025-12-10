@@ -31,11 +31,9 @@ pub fn handle_bank(bank: &str, length: usize) -> u64 {
         .rfold(0u64, |acc, digit| acc * 10 + digit)
 }
 
-pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn main(input: Vec<String>) {
     let result_a: u64 = input.iter().map(|bank| handle_bank(bank, 2)).sum();
     println!("Result A: {:?}", result_a);
     let result_b: u64 = input.iter().map(|bank| handle_bank(bank, 12)).sum();
     println!("Result B: {:?}", result_b);
-
-    return Ok(());
 }

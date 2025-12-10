@@ -32,7 +32,7 @@ pub fn calculate_distances(boxes: &Vec<ElectricalBox>) -> HashMap<(usize, usize)
     distances_memoization
 }
 
-pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn main(input: Vec<String>) {
     let boxes: Vec<ElectricalBox> = input
         .into_iter()
         .map(ElectricalBox::new)
@@ -75,6 +75,4 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
             break;
         }
     }
-
-    Ok(())
 }

@@ -24,7 +24,7 @@ fn parse_input(input: &[String]) -> Vec<Vec<String>> {
         .collect()
 }
 
-pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn main(input: Vec<String>) {
     let mut columns = parse_input(&input);
 
     let mut sum: usize = 0;
@@ -50,6 +50,4 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
         }
     }
     println!("{:?}", sum);
-
-    Ok(())
 }

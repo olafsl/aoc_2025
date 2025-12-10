@@ -42,7 +42,7 @@ impl Ord for Range {
     }
 }
 
-pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn main(input: Vec<String>) {
     let mut input = input.clone();
     let empty_line = input.iter().position(|x| x.len() == 0).unwrap();
     input.truncate(empty_line);
@@ -72,6 +72,4 @@ pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     println!("Result B: {:?}", sum);
-
-    Ok(())
 }

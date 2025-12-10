@@ -26,12 +26,11 @@ pub fn process_range(
     Ok(acc)
 }
 
-pub fn main(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn main(input: Vec<String>) {
     let (sum_a, sum_b) = input[0]
         .split(",")
-        .try_fold((0i64, 0i64), |acc, s| process_range(acc, s))?;
+        .try_fold((0i64, 0i64), |acc, s| process_range(acc, s))
+        .unwrap();
 
     println!("Sum A: {}, Sum B: {}", sum_a, sum_b + sum_a);
-
-    Ok(())
 }

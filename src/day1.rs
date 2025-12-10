@@ -26,7 +26,7 @@ pub fn div_rem(value: i32) -> (i32, i32) {
     (value.div_euclid(100).abs(), value.rem_euclid(100))
 }
 
-pub fn calculate(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn main(input: Vec<String>) {
     let mut value = 50;
     let mut passes = 0;
     let mut nr_of_zeroes = 0;
@@ -53,5 +53,4 @@ pub fn calculate(input: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     println!("Passes: {}, Zeroes: {}", passes, nr_of_zeroes);
-    return Ok(());
 }
