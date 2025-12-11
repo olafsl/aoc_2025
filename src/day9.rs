@@ -47,9 +47,12 @@ pub fn create_grid(edges: &Vec<Id>) -> HashMap<Id, bool> {
         for j in 0..max {
             let val = grid.get(&(i, j)).unwrap();
             if *val {
-                let up = grid.get(&(i-1, j)).unwrap_or(&false);
-                let down = grid.get(&(i+1, j)).unwrap_or(&false);
-                println!("({:?}, {:?}) -> (up: {:?}, down: {:?}, val: {:?})", i, j, up, down, val);
+                let up = grid.get(&(i - 1, j)).unwrap_or(&false);
+                let down = grid.get(&(i + 1, j)).unwrap_or(&false);
+                println!(
+                    "({:?}, {:?}) -> (up: {:?}, down: {:?}, val: {:?})",
+                    i, j, up, down, val
+                );
                 if (from_up && *up) || (from_down && *down) {
                     from_up = false;
                     from_down = false;
@@ -73,8 +76,6 @@ pub fn create_grid(edges: &Vec<Id>) -> HashMap<Id, bool> {
                     from_down = true;
                     continue;
                 }
-
-
             }
             if inside {
                 fill_in.push((i, j));
@@ -123,7 +124,7 @@ pub fn main(input: Vec<String>) {
 
     // println!("{:?}", grid);
 
-    let a = tiles
+    let _a = tiles
         .tuple_combinations()
         .sorted_by(|(a, b), (c, d)| area(&a, &b).cmp(&area(&c, &d)).reverse())
         .filter(|(a, b)| {
