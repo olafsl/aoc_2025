@@ -6,13 +6,17 @@ type Id = (isize, isize);
 
 pub fn create_grid(edges: &Vec<Id>) -> HashMap<Id, bool> {
     let mut grid = HashMap::new();
-    let max = 12;
+    let max = 100000;
     for i in 0..max {
         for j in 0..max {
             grid.insert((i, j), false);
         }
+        if i % 1000 == 0 {
+            println!("Creating grid in row {}", i);
+        }
     }
 
+    println!("Created grid");
     let windows = edges.iter().tuple_windows().collect_vec();
 
     for (a, b) in windows {
@@ -26,62 +30,65 @@ pub fn create_grid(edges: &Vec<Id>) -> HashMap<Id, bool> {
             }
         }
     }
+    println!("Filled in corners");
     for i in edges[0].0..=edges[edges.len() - 1].1 {
         grid.insert((edges[0].0, i), true);
     }
     for i in edges[0].1..=edges[edges.len() - 1].0 {
         grid.insert((i, edges[0].1), true);
     }
+    println!("Filled in edges");
 
-    for i in 0..max {
-        println!("");
-        for j in 0..max {
-            print!("{}", match grid.get(&(i, j)).unwrap_or(&false) {
-                true => "#",
-                false => ".",
-            });
-        }
-    }
-
-
+    let mut fill_in = Vec::new();
     for i in 0..max {
         let mut inside = false;
-        let mut total_inside_adj = 0;
+        let mut from_up = false;
+        let mut from_down = false;
         for j in 0..max {
-            if inside {
-                if *grid.get(&(i-1, j)).unwrap_or(&false) && *grid.get(&(i+1, j)).unwrap_or(&false) {
-                    inside = !inside;
+            let val = grid.get(&(i, j)).unwrap();
+            if *val {
+                let up = grid.get(&(i-1, j)).unwrap_or(&false);
+                let down = grid.get(&(i+1, j)).unwrap_or(&false);
+                println!("({:?}, {:?}) -> (up: {:?}, down: {:?}, val: {:?})", i, j, up, down, val);
+                if (from_up && *up) || (from_down && *down) {
+                    from_up = false;
+                    from_down = false;
+                    continue;
                 }
-                if *grid.get(&(i, j-1)).unwrap_or(&false) && *grid.get(&(i, j+1)).unwrap_or(&false) {
-            } else {
+                if (from_up && *down) || (from_down && *up) {
+                    inside = !inside;
+                    from_up = false;
+                    from_down = false;
+                    continue;
+                }
+                if *up && *down {
+                    inside = !inside;
+                    continue;
+                }
+                if *up {
+                    from_up = true;
+                    continue;
+                }
+                if *down {
+                    from_down = true;
+                    continue;
+                }
 
 
             }
-            } && *grid.get(&(i, j)).unwrap() {
-                inside = !inside;
+            if inside {
+                fill_in.push((i, j));
             }
-            if inside && *grid.get(&(i, j-1)).unwrap_or(&false) {
-                total_inside_adj += 1;
-            }
-            if *grid.get(&(i, j)).unwrap() {
-                inside = !inside;
-            }
-
-            if inside && total_inside_adj % 2 == 0 {
-                grid.insert((i, j), true);
-            }
+        }
+        if i % 1000 == 0 {
+            println!("Filled in row {}", i);
         }
     }
 
-    for i in 0..max {
-        println!("");
-        for j in 0..max {
-            print!("{}", match grid.get(&(i, j)).unwrap_or(&false) {
-                true => "#",
-                false => ".",
-            });
-        }
+    for (i, j) in fill_in {
+        grid.insert((i, j), true);
     }
+
     grid
 }
 
