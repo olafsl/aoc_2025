@@ -64,8 +64,7 @@ pub fn count_paths(input: Vec<String>) -> usize {
         let followers = expand_endpoints(&current, &graph);
         let followers_passed_fft = expand_endpoints(&current_fft, &graph);
         let followers_passed_dac = expand_endpoints(&current_dac, &graph);
-        let followers_passed_fft_and_dac =
-            expand_endpoints(&current_fft_dac, &graph);
+        let followers_passed_fft_and_dac = expand_endpoints(&current_fft_dac, &graph);
 
         current.clear();
         current_fft.clear();
@@ -76,26 +75,22 @@ pub fn count_paths(input: Vec<String>) -> usize {
             match endpoint {
                 x if x == fft => *current_fft.entry(endpoint).or_insert(0) += count,
                 x if x == dac => *current_dac.entry(endpoint).or_insert(0) += count,
-                x if x == out => (), 
+                x if x == out => (),
                 _ => *current.entry(endpoint).or_insert(0) += count,
             }
         }
 
         for (&endpoint, &count) in &followers_passed_dac {
             match endpoint {
-                x if x == fft => {
-                    *current_fft_dac.entry(endpoint).or_insert(0) += count
-                }
-                x if x == out => (), 
+                x if x == fft => *current_fft_dac.entry(endpoint).or_insert(0) += count,
+                x if x == out => (),
                 _ => *current_dac.entry(endpoint).or_insert(0) += count,
             }
         }
 
         for (&endpoint, &count) in &followers_passed_fft {
             match endpoint {
-                x if x == dac => {
-                    *current_fft_dac.entry(endpoint).or_insert(0) += count
-                }
+                x if x == dac => *current_fft_dac.entry(endpoint).or_insert(0) += count,
                 x if x == out => (),
                 _ => *current_fft.entry(endpoint).or_insert(0) += count,
             }
@@ -103,7 +98,7 @@ pub fn count_paths(input: Vec<String>) -> usize {
 
         for (&endpoint, &count) in &followers_passed_fft_and_dac {
             match endpoint {
-                x if x == out => nr_of_paths += count, 
+                x if x == out => nr_of_paths += count,
                 _ => *current_fft_dac.entry(endpoint).or_insert(0) += count,
             }
         }
