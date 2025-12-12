@@ -4,6 +4,7 @@ use std::fs;
 pub mod day1;
 pub mod day10;
 pub mod day11;
+pub mod day12;
 pub mod day2;
 pub mod day3;
 pub mod day4;
@@ -12,6 +13,7 @@ pub mod day6;
 pub mod day7;
 pub mod day8;
 pub mod day9;
+
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
@@ -44,6 +46,7 @@ fn run_solution(day: &str, input: Vec<String>) {
         "9" => day9::main(input),
         "10" => day10::main(input),
         "11" => day11::main(input),
+        "12" => day12::main(input),
         _ => println!("Day {} not implemented yet", day),
     }
 }
